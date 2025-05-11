@@ -19,8 +19,8 @@
       --text-color: #222;
       --card-bg: #fff;
       --card-shadow: rgba(0, 0, 0, 0.05);
-      --primary: #ff6b6b;
-      --accent: #1DA1F2;
+      --primary: #1DA1F2;
+      --accent: #ff6b6b;
     }
     [data-theme="dark"] {
       --bg-color: #121212;
@@ -37,9 +37,16 @@
       color: var(--text-color);
       line-height: 1.6;
     }
+
+    /* Header with red → white → blue gradient */
     header {
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      color: white;
+      background: linear-gradient(
+        90deg,
+        #AE1E2D 0%,   /* Dutch flag red */
+        #FFFFFF 50%,  /* pure white */
+        #21468B 100%  /* Dutch flag blue */
+      );
+      color: #222;      /* dark text for legibility on white */
       padding: 2rem 1rem;
       text-align: center;
       position: sticky;
@@ -48,7 +55,8 @@
       box-shadow: 0 4px 10px var(--card-shadow);
     }
     header h1 { margin: 0; font-size: 2rem; font-weight: 700; }
-    header p { margin: 0.5rem 0 0; font-size: 1rem; opacity: 0.9; }
+    header p  { margin: 0.5rem 0 0; font-size: 1rem; opacity: 0.9; }
+
     .theme-toggle {
       position: absolute;
       top:1rem; right:1rem;
@@ -60,7 +68,10 @@
       cursor:pointer; transition:transform 0.2s ease;
     }
     .theme-toggle:hover { transform: scale(1.1); }
-    #google_translate_element { position: absolute; top:1rem; left:1rem; }
+
+    #google_translate_element {
+      position: absolute; top:1rem; left:1rem;
+    }
 
     .subscribe-section {
       padding: 1rem;
@@ -97,40 +108,56 @@
     }
 
     main {
-      max-width:960px;
-      margin:2rem auto;
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-      gap:2rem;
-      padding:0 1rem;
+      max-width: 960px;
+      margin: 2rem auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 0 1rem;
     }
     .episode {
-      background:var(--card-bg);
-      border-radius:12px;
-      box-shadow:0 2px 12px var(--card-shadow);
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-      transition:transform 0.3s ease, box-shadow 0.3s ease;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px var(--card-shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     .episode:hover {
-      transform:translateY(-5px);
-      box-shadow:0 6px 20px var(--card-shadow);
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px var(--card-shadow);
     }
-    .episode-content { padding:1.5rem; flex-grow:1; }
+    .episode-content { padding: 1.5rem; flex-grow: 1; }
     .episode-link {
-      text-decoration:none;
-      color:var(--primary);
-      transition:color 0.2s ease;
+      text-decoration: none;
+      color: var(--primary);
+      transition: color 0.2s ease;
     }
-    .episode-link:hover { color:var(--accent); }
-    .episode h2 { margin:0 0 0.5rem; font-size:1.3rem; font-weight:600; }
-    .episode meta { display:block; font-size:0.85rem; opacity:0.7; margin-bottom:1rem; }
-    .snippet { font-size:0.95rem; opacity:0.85; margin-bottom:1rem; }
-    .episode audio { width:100%; border-top:1px solid var(--card-shadow); }
-    .error { color:var(--accent); text-align:center; }
-    #load-more { display:block; margin:2rem auto; padding:0.75rem 1.5rem; font-size:1rem; background:var(--primary); color:#fff; border:none; border-radius:8px; cursor:pointer; transition:background 0.2s ease; }
-    #load-more:hover { background:var(--accent); }
+    .episode-link:hover { color: var(--accent); }
+    .episode h2      { margin: 0 0 0.5rem; font-size: 1.3rem; font-weight: 600; }
+    .episode meta    { display: block; font-size: 0.85rem; opacity: 0.7; margin-bottom: 1rem; }
+    .snippet         { font-size: 0.95rem; opacity: 0.85; margin-bottom: 1rem; }
+    .episode audio   { width: 100%; border-top: 1px solid var(--card-shadow); }
+
+    .error {
+      color: var(--accent);
+      text-align: center;
+    }
+
+    #load-more {
+      display: block;
+      margin: 2rem auto;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    #load-more:hover { background: var(--accent); }
   </style>
 </head>
 <body>
@@ -167,44 +194,67 @@
   <script>
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({pageLanguage:'nl',includedLanguages:'en',autoDisplay:false},'google_translate_element');
-      setTimeout(()=>{const combo=document.querySelector('.goog-te-combo');if(combo){combo.value='en';combo.dispatchEvent(new Event('change'));}},500);
+      setTimeout(()=>{
+        const combo = document.querySelector('.goog-te-combo');
+        if (combo) {
+          combo.value = 'en';
+          combo.dispatchEvent(new Event('change'));
+        }
+      }, 500);
     }
   </script>
   <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
   <script>
-    const toggle = document.getElementById('toggle-theme'), root = document.documentElement;
+    const toggle = document.getElementById('toggle-theme'),
+          root = document.documentElement;
     function updateTheme() {
-      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        root.setAttribute('data-theme', 'dark'); toggle.textContent = '☀️';
+      if (localStorage.theme === 'dark' ||
+          (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        root.setAttribute('data-theme', 'dark');
+        toggle.textContent = '☀️';
       } else {
-        root.removeAttribute('data-theme'); toggle.textContent = '🌙';
+        root.removeAttribute('data-theme');
+        toggle.textContent = '🌙';
       }
     }
-    toggle.addEventListener('click', () => { localStorage.theme = localStorage.theme === 'dark' ? 'light' : 'dark'; updateTheme(); });
+    toggle.addEventListener('click', () => {
+      localStorage.theme = localStorage.theme === 'dark' ? 'light' : 'dark';
+      updateTheme();
+    });
     updateTheme();
 
-    const EPISODES_PER_BATCH = 5; let allItems = [], currentIndex = 0;
+    const EPISODES_PER_BATCH = 5;
+    let allItems = [], currentIndex = 0;
+
     async function loadFeed() {
       try {
         const res = await fetch('https://feed.podbean.com/nederlandsebipodcast/feed.xml');
         if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
         const xml = new DOMParser().parseFromString(await res.text(), 'application/xml');
-        allItems = Array.from(xml.querySelectorAll('item')); document.querySelector('.loading').remove(); renderNextBatch();
+        allItems = Array.from(xml.querySelectorAll('item'));
+        document.querySelector('.loading').remove();
+        renderNextBatch();
       } catch (err) {
-        document.getElementById('episodes').innerHTML = `<p class="error">Unable to load feed: ${err.message}</p>`;
+        document.getElementById('episodes').innerHTML =
+          `<p class="error">Unable to load feed: ${err.message}</p>`;
       }
     }
+
     function renderNextBatch() {
       const container = document.getElementById('episodes');
       const batch = allItems.slice(currentIndex, currentIndex + EPISODES_PER_BATCH);
       batch.forEach(item => {
-        const title = item.querySelector('title')?.textContent || 'No title';
-        const link = item.querySelector('link')?.textContent || '#';
-        const pubDate = item.querySelector('pubDate')?.textContent ? new Date(item.querySelector('pubDate').textContent).toISOString().split('T')[0] : '';
-        const desc = item.querySelector('description')?.textContent || '';
+        const title   = item.querySelector('title')?.textContent || 'No title';
+        const link    = item.querySelector('link')?.textContent || '#';
+        const pubDate = item.querySelector('pubDate')?.textContent
+          ? new Date(item.querySelector('pubDate').textContent)
+              .toISOString().split('T')[0]
+          : '';
+        const desc     = item.querySelector('description')?.textContent || '';
         const audioUrl = item.querySelector('enclosure')?.getAttribute('url') || '';
-        const card = document.createElement('article'); card.className = 'episode';
+        const card     = document.createElement('article');
+        card.className = 'episode';
         card.innerHTML = `
           <div class="episode-content">
             <h2><a href="${link}" target="_blank" class="episode-link">${title}</a></h2>
@@ -215,8 +265,10 @@
         container.appendChild(card);
       });
       currentIndex += batch.length;
-      document.getElementById('load-more').style.display = currentIndex < allItems.length ? 'block' : 'none';
+      document.getElementById('load-more').style.display =
+        currentIndex < allItems.length ? 'block' : 'none';
     }
+
     document.getElementById('load-more').addEventListener('click', renderNextBatch);
     loadFeed();
   </script>
