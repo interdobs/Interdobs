@@ -44,7 +44,6 @@
     }
     header h1 { margin: 0; font-size: 2rem; font-weight: 700; }
     header p { margin: 0.5rem 0 0; font-size: 1rem; opacity: 0.9; }
-
     .theme-toggle {
       position: absolute;
       top:1rem; right:1rem;
@@ -104,6 +103,21 @@
       border-top:1px solid var(--card-shadow);
     }
     .error { color:var(--accent); text-align:center; }
+    #load-more {
+      display: block;
+      margin: 2rem auto;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    #load-more:hover {
+      background: var(--accent);
+    }
   </style>
 </head>
 <body>
@@ -122,6 +136,7 @@
   <main id="episodes">
     <p class="loading">Loading episodes…</p>
   </main>
+  <button id="load-more" style="display:none;">Load more</button>
 
   <script>
     function googleTranslateElementInit() {
@@ -162,7 +177,11 @@
     });
     updateTheme();
 
-    // Load all episodes
+    // Load episodes in batches with "Load more" button
+    const EPISODES_PER_BATCH = 5;
+    let allItems = [];
+    let currentIndex = 0;
+
     async function loadFeed() {
       const url = 'https://feed.podbean.com/nederlandsebipodcast/feed.xml';
       try {
@@ -171,44 +190,61 @@
         const xmlText = await res.text();
         const parser = new DOMParser();
         const xml = parser.parseFromString(xmlText, 'application/xml');
-        const items = Array.from(xml.querySelectorAll('item'));
-        const container = document.getElementById('episodes');
-        container.innerHTML = '';
-        items.forEach(item => {
-          const title      = item.querySelector('title')?.textContent || 'No title';
-          const link       = item.querySelector('link')?.textContent || '#';
-          const pubDateRaw = item.querySelector('pubDate')?.textContent || '';
-          const pubDate    = pubDateRaw
-                              ? new Date(pubDateRaw).toISOString().split('T')[0]
-                              : '';
-          const desc       = item.querySelector('description')?.textContent || '';
-          const enclosure  = item.querySelector('enclosure');
-          const audioUrl   = enclosure ? enclosure.getAttribute('url') : '';
-
-          const card = document.createElement('article');
-          card.className = 'episode';
-          card.innerHTML = `
-            <div class="episode-content">
-              <h2>
-                <a href="${link}" target="_blank" class="episode-link">
-                  ${title}
-                </a>
-              </h2>
-              <meta>${pubDate}</meta>
-              <p class="snippet">${desc}</p>
-            </div>
-            ${audioUrl
-              ? `<audio controls src="${audioUrl}"></audio>`
-              : ''}
-          `;
-          container.appendChild(card);
-        });
+        allItems = Array.from(xml.querySelectorAll('item'));
+        document.querySelector('.loading')?.remove();
+        renderNextBatch();
       } catch (err) {
         document.getElementById('episodes').innerHTML =
           `<p class="error">Unable to load feed: ${err.message}</p>`;
       }
     }
+
+    function renderNextBatch() {
+      const container = document.getElementById('episodes');
+      const batch = allItems.slice(currentIndex, currentIndex + EPISODES_PER_BATCH);
+      batch.forEach(item => {
+        const title      = item.querySelector('title')?.textContent || 'No title';
+        const link       = item.querySelector('link')?.textContent || '#';
+        const pubDateRaw = item.querySelector('pubDate')?.textContent || '';
+        const pubDate    = pubDateRaw
+                            ? new Date(pubDateRaw).toISOString().split('T')[0]
+                            : '';
+        const desc       = item.querySelector('description')?.textContent || '';
+        const enclosure  = item.querySelector('enclosure');
+        const audioUrl   = enclosure ? enclosure.getAttribute('url') : '';
+
+        const card = document.createElement('article');
+        card.className = 'episode';
+        card.innerHTML = `
+          <div class="episode-content">
+            <h2>
+              <a href="${link}" target="_blank" class="episode-link">
+                ${title}
+              </a>
+            </h2>
+            <meta>${pubDate}</meta>
+            <p class="snippet">${desc}</p>
+          </div>
+          ${audioUrl
+            ? `<audio controls src="${audioUrl}"></audio>`
+            : ''}
+        `;
+        container.appendChild(card);
+      });
+
+      currentIndex += batch.length;
+      const loadMoreBtn = document.getElementById('load-more');
+      if (currentIndex < allItems.length) {
+        loadMoreBtn.style.display = 'block';
+      } else {
+        loadMoreBtn.style.display = 'none';
+      }
+    }
+
+    document.getElementById('load-more').addEventListener('click', renderNextBatch);
+
+    // kick things off
     loadFeed();
   </script>
 </body>
-</html>
+</h
