@@ -46,7 +46,7 @@
         #FFFFFF 50%,  /* pure white */
         #21468B 100%  /* Dutch flag blue */
       );
-      color: #222;      /* dark text for legibility on white */
+      color: #222;
       padding: 2rem 1rem;
       text-align: center;
       position: sticky;
@@ -56,6 +56,39 @@
     }
     header h1 { margin: 0; font-size: 2rem; font-weight: 700; }
     header p  { margin: 0.5rem 0 0; font-size: 1rem; opacity: 0.9; }
+
+    /* New Hero Section */
+    .hero-youtube {
+      background: var(--primary);
+      color: #fff;
+      text-align: center;
+      padding: 3rem 1rem;
+      margin-bottom: 2rem;
+    }
+    .hero-youtube h2 {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .hero-youtube p {
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      opacity: 0.9;
+    }
+    .hero-youtube a {
+      display: inline-block;
+      background: #fff;
+      color: var(--primary);
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+    .hero-youtube a:hover {
+      transform: translateY(-2px);
+    }
 
     .theme-toggle {
       position: absolute;
@@ -171,6 +204,15 @@
     <p>Insights and conversations in SAP Business Intelligence</p>
     <button class="theme-toggle" id="toggle-theme">🌙</button>
   </header>
+
+  <!-- Hero Section -->
+  <section class="hero-youtube">
+    <h2>🎥 Listen on YouTube (EN Subtitles)</h2>
+    <p>Future episodes will all be in English. Want to listen in English already? Use our YouTube channel and switch on subs!</p>
+    <a href="https://www.youtube.com/playlist?list=PLz2YKTCtPC0Y5XgzBeFCDhLKYM6gwEk7G" target="_blank">
+      Watch the Playlist
+    </a>
+  </section>
 
   <section class="subscribe-section">
     <h2>Subscribe to the Podcast</h2>
