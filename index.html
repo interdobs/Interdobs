@@ -56,33 +56,80 @@
         display: none;
       }
     }
-    .theme-toggle { position: absolute; top:1rem; right:1rem; background:rgba(255,255,255,0.2); border:none; border-radius:50%; width:2.5rem; height:2.5rem; display:flex; align-items:center; justify-content:center; font-size:1.2rem; color:white; cursor:pointer; transition:transform 0.2s ease; }
+    .theme-toggle {
+      position: absolute;
+      top:1rem; right:1rem;
+      background:rgba(255,255,255,0.2);
+      border:none; border-radius:50%;
+      width:2.5rem; height:2.5rem;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.2rem; color:white;
+      cursor:pointer; transition:transform 0.2s ease;
+    }
     .theme-toggle:hover { transform: scale(1.1); }
     #google_translate_element { position: absolute; top:1rem; left:1rem; }
-    main { max-width:960px; margin:2rem auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem; padding:0 1rem; }
-    .episode { background:var(--card-bg); border-radius:12px; box-shadow:0 2px 12px var(--card-shadow); overflow:hidden; display:flex; flex-direction:column; transition:transform 0.3s ease, box-shadow 0.3s ease; }
-    .episode:hover { transform:translateY(-5px); box-shadow:0 6px 20px var(--card-shadow); }
+    main {
+      max-width:960px;
+      margin:2rem auto;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:2rem;
+      padding:0 1rem;
+    }
+    .episode {
+      background:var(--card-bg);
+      border-radius:12px;
+      box-shadow:0 2px 12px var(--card-shadow);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      transition:transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .episode:hover {
+      transform:translateY(-5px);
+      box-shadow:0 6px 20px var(--card-shadow);
+    }
     .episode-content { padding:1.5rem; flex-grow:1; }
-    .episode-link { text-decoration:none; color:var(--primary); transition:color 0.2s ease; }
+    .episode-link {
+      text-decoration:none;
+      color:var(--primary);
+      transition:color 0.2s ease;
+    }
     .episode-link:hover { color:var(--accent); }
     .episode h2 { margin:0 0 0.5rem; font-size:1.3rem; font-weight:600; }
-    .episode meta { display:block; font-size:0.85rem; color:var(--text-color); opacity:0.7; margin-bottom:1rem; }
-    .snippet { font-size:0.95rem; color:var(--text-color); opacity:0.85; margin-bottom:1rem; }
-    .episode audio { width:100%; border-top:1px solid var(--card-shadow); }
+    .episode meta {
+      display:block;
+      font-size:0.85rem;
+      color:var(--text-color);
+      opacity:0.7;
+      margin-bottom:1rem;
+    }
+    .snippet {
+      font-size:0.95rem;
+      color:var(--text-color);
+      opacity:0.85;
+      margin-bottom:1rem;
+    }
+    .episode audio {
+      width:100%;
+      border-top:1px solid var(--card-shadow);
+    }
     .error { color:var(--accent); text-align:center; }
   </style>
 </head>
 <body>
   <header>
     <script>
-      // Auto-translate Dutch to English via Google Translate widget
+      // Auto-translate Dutch→English via Google Translate widget
       document.cookie = "googtrans=/nl/en;path=/";
       document.cookie = "googtrans=/nl/en;domain=" + location.hostname + ";path=/";
     </script>
     <div id="google_translate_element"></div>
     <h1>Dutch BI Podcast</h1>
     <p>Insights and conversations in SAP Business Intelligence</p>
-    <p class="intro">In this Podcast, we delve into the fascinating world of SAP Business Intelligence. Our discussions are candid and relaxed, and we’re not afraid to express our honest opinions. Join us as we shed light on the BI landscape, aiming to be a valuable companion on your journey towards mastering the world of Business Intelligence.</p>
+    <p class="intro">
+      In this Podcast, we delve into the fascinating world of SAP Business Intelligence. Our discussions are candid and relaxed, and we’re not afraid to express our honest opinions. Join us as we shed light on the BI landscape, aiming to be a valuable companion on your journey towards mastering the world of Business Intelligence.
+    </p>
     <button class="theme-toggle" id="toggle-theme">🌙</button>
   </header>
 
@@ -98,8 +145,8 @@
         autoDisplay: false,
         multilanguagePage: true
       }, 'google_translate_element');
-      setTimeout(function() {
-        var combo = document.querySelector('.goog-te-combo');
+      setTimeout(() => {
+        const combo = document.querySelector('.goog-te-combo');
         if (combo) {
           combo.value = 'en';
           combo.dispatchEvent(new Event('change'));
@@ -114,7 +161,8 @@
     const toggle = document.getElementById('toggle-theme');
     const root = document.documentElement;
     function updateTheme() {
-      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      if (localStorage.theme === 'dark' ||
+         (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         root.setAttribute('data-theme', 'dark');
         toggle.textContent = '☀️';
       } else {
@@ -128,31 +176,50 @@
     });
     updateTheme();
 
-    // Load RSS feed and show snippet
+    // Load **all** episodes by parsing the raw RSS XML
     async function loadFeed() {
-      const proxy = 'https://api.rss2json.com/v1/api.json?rss_url=';
-      const feedUrl = encodeURIComponent('https://feed.podbean.com/nederlandsebipodcast/feed.xml');
+      const url = 'https://feed.podbean.com/nederlandsebipodcast/feed.xml';
       try {
-        const res = await fetch(proxy + feedUrl);
-        if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
-        const data = await res.json();
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+        const xmlText = await res.text();
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(xmlText, 'application/xml');
+        const items = Array.from(xml.querySelectorAll('item'));
         const container = document.getElementById('episodes');
         container.innerHTML = '';
-        data.items.forEach(item => {
+        items.forEach(item => {
+          const title      = item.querySelector('title')?.textContent || 'No title';
+          const link       = item.querySelector('link')?.textContent || '#';
+          const pubDateRaw = item.querySelector('pubDate')?.textContent || '';
+          const pubDate    = pubDateRaw
+                              ? new Date(pubDateRaw).toISOString().split('T')[0]
+                              : '';
+          const desc       = item.querySelector('description')?.textContent || '';
+          const enclosure  = item.querySelector('enclosure');
+          const audioUrl   = enclosure ? enclosure.getAttribute('url') : '';
+
           const card = document.createElement('article');
           card.className = 'episode';
           card.innerHTML = `
             <div class="episode-content">
-              <h2><a href="${item.link}" target="_blank" class="episode-link">${item.title}</a></h2>
-              <meta>${new Date(item.pubDate).toISOString().split('T')[0]}</meta>
-              <p class="snippet">${item.description}</p>
+              <h2>
+                <a href="${link}" target="_blank" class="episode-link">
+                  ${title}
+                </a>
+              </h2>
+              <meta>${pubDate}</meta>
+              <p class="snippet">${desc}</p>
             </div>
-            <audio controls src="${item.enclosure.link}"></audio>
+            ${audioUrl
+              ? `<audio controls src="${audioUrl}"></audio>`
+              : ''}
           `;
           container.appendChild(card);
         });
       } catch (err) {
-        document.getElementById('episodes').innerHTML = `<p class="error">Unable to load feed: ${err.message}</p>`;
+        document.getElementById('episodes').innerHTML =
+          `<p class="error">Unable to load feed: ${err.message}</p>`;
       }
     }
     loadFeed();
