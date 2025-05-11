@@ -44,18 +44,7 @@
     }
     header h1 { margin: 0; font-size: 2rem; font-weight: 700; }
     header p { margin: 0.5rem 0 0; font-size: 1rem; opacity: 0.9; }
-    .intro {
-      max-width: 800px;
-      margin: 1rem auto 0;
-      font-size: 0.95rem;
-      opacity: 0.85;
-    }
-    /* hide intro on mobile */
-    @media only screen and (max-width: 600px) {
-      header .intro {
-        display: none;
-      }
-    }
+
     .theme-toggle {
       position: absolute;
       top:1rem; right:1rem;
@@ -127,9 +116,6 @@
     <div id="google_translate_element"></div>
     <h1>Dutch BI Podcast</h1>
     <p>Insights and conversations in SAP Business Intelligence</p>
-    <p class="intro">
-      In this Podcast, we delve into the fascinating world of SAP Business Intelligence. Our discussions are candid and relaxed, and we’re not afraid to express our honest opinions. Join us as we shed light on the BI landscape, aiming to be a valuable companion on your journey towards mastering the world of Business Intelligence.
-    </p>
     <button class="theme-toggle" id="toggle-theme">🌙</button>
   </header>
 
@@ -176,7 +162,7 @@
     });
     updateTheme();
 
-    // Load **all** episodes by parsing the raw RSS XML
+    // Load all episodes
     async function loadFeed() {
       const url = 'https://feed.podbean.com/nederlandsebipodcast/feed.xml';
       try {
