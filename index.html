@@ -13,6 +13,15 @@
   <!-- Google Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+  <!-- Font Awesome voor social-iconen -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-Po01FhmuS8VjK0QWZKJm3znE5vGAh5Fq+XwYC+eXQnKFUXTfDU1ylp+0jZJp6wZkT0+kH9akPRrQH8qZYMwYKg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
   <style>
     :root {
       --bg-color: #f0f2f5;
@@ -140,6 +149,46 @@
       font-size: 1.2rem;
     }
 
+    /* —— Social Media Section —— */
+    .social-section {
+      padding: 1rem;
+      text-align: center;
+    }
+    .social-section h2 {
+      margin-bottom: 0.75rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .social-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .social-list li a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: var(--text-color);
+      background: var(--card-bg);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px var(--card-shadow);
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .social-list li a:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+    .social-list li a i {
+      margin-right: 0.5rem;
+      font-size: 1.2rem;
+    }
+
     main {
       max-width: 960px;
       margin: 2rem auto;
@@ -225,6 +274,37 @@
       <li><a href="https://www.podchaser.com/podcasts/de-nederlandse-bi-podcast-198764" target="_blank"><span class="material-icons" aria-hidden="true">mic</span> Podchaser</a></li>
       <li><a href="https://www.boomplaymusic.com/podcasts/80531" target="_blank"><span class="material-icons" aria-hidden="true">album</span> BoomPlay</a></li>
       <li><a href="https://open.spotify.com/show/0TLTp68JiPK1ZTojFpV1nO" target="_blank"><span class="material-icons" aria-hidden="true">music_note</span> Spotify</a></li>
+    </ul>
+  </section>
+
+  <!-- Social Media Section -->
+  <section class="social-section">
+    <h2>Volg ons op social media</h2>
+    <ul class="social-list">
+      <li>
+        <a href="https://www.facebook.com/Interdobs/" target="_blank">
+          <i class="fab fa-facebook-f" aria-hidden="true"></i>
+          Facebook
+        </a>
+      </li>
+      <li>
+        <a href="https://x.com/interdobs" target="_blank">
+          <i class="fab fa-x-twitter" aria-hidden="true"></i>
+          X
+        </a>
+      </li>
+      <li>
+        <a href="https://www.youtube.com/channel/UCqy_8xfex5lEJRls5Jl23fg" target="_blank">
+          <i class="fab fa-youtube" aria-hidden="true"></i>
+          YouTube
+        </a>
+      </li>
+      <li>
+        <a href="https://www.linkedin.com/company/207205/admin/page-posts/published/" target="_blank">
+          <i class="fab fa-linkedin-in" aria-hidden="true"></i>
+          LinkedIn
+        </a>
+      </li>
     </ul>
   </section>
 
