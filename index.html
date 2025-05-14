@@ -56,15 +56,30 @@
         #21468B 100%  /* Dutch flag blue */
       );
       color: #222;
-      padding: 2rem 1rem;
+      padding: 1.5rem 1rem;
       text-align: center;
       position: sticky;
       top: 0;
       z-index: 10;
       box-shadow: 0 4px 10px var(--card-shadow);
     }
-    header h1 { margin: 0; font-size: 2rem; font-weight: 700; }
-    header p  { margin: 0.5rem 0 0; font-size: 1rem; opacity: 0.9; }
+    .site-logo {
+      height: 50px;
+      vertical-align: middle;
+      margin-right: 0.75rem;
+    }
+    header h1 {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    header p {
+      margin: 0.5rem 0 0;
+      font-size: 1rem;
+      opacity: 0.9;
+    }
 
     /* New Hero Section */
     .hero-youtube {
@@ -249,6 +264,14 @@
       document.cookie = "googtrans=/nl/en;domain=" + location.hostname + ";path=/";
     </script>
     <div id="google_translate_element"></div>
+
+    <!-- Hotlinked Podbean logo -->
+    <img
+      src="https://pbcdn1.podbean.com/imglogo/image-logo/623384/BIPodcast.jpg"
+      alt="The Dutch BI Podcast Logo"
+      class="site-logo"
+    >
+
     <h1>The Dutch BI Podcast</h1>
     <p>Insights and conversations on SAP Business Intelligence</p>
     <button class="theme-toggle" id="toggle-theme">🌙</button>
@@ -316,7 +339,7 @@
   <script>
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({pageLanguage:'nl',includedLanguages:'en',autoDisplay:false},'google_translate_element');
-      setTimeout(()=>{
+      setTimeout(()=> {
         const combo = document.querySelector('.goog-te-combo');
         if (combo) {
           combo.value = 'en';
